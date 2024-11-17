@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frontend App</title>
+    <script>
+        async function fetchMessage() {
+            const response = await fetch('/api/message');
+            const data = await response.json();
+            document.getElementById('message').innerText = data.message;
+        }
+
+        async function sendData() {
+            const payload = { name: "User", action: "clicked" };
+            const response = await fetch('/api/data', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await response.json();
+            alert(`Response: ${data.status}`);
+        }
+    </script>
+</head>
+<body>
+    <h1>Frontend Application</h1>
+    <button onclick="fetchMessage()">Get Message</button>
+    <p id="message">Message will appear here...</p>
+    <button onclick="sendData()">Send Data to Backend</button>
+</body>
+</html>
