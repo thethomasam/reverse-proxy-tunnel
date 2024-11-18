@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN pip install flask
 
 # Expose the backend port
-EXPOSE 3000
+EXPOSE 8080
 
 # Default command to keep the container running, overridden in the Deployment
 CMD ["tail", "-f", "/dev/null"]

@@ -1,40 +1,56 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: test-backend
+  namespace: aiml-shop-objcount
+  name: backend
+  labels:
+    app: test-backend
+    service: backend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: backend
+      app: test-backend
+      service: backend
   template:
     metadata:
       labels:
-        app: backend
+        app: test-backend
+        service: backend
     spec:
       containers:
-      - name: backend-container
-        image: python:3.10-slim
+      - name: backend
+        image: docker.io/thesamthomas77/backend-env:v3
         command: ["/bin/bash", "-c"]
         args:
-          - |
-            apt-get update && apt-get install -y git &&
-            git clone https://github.com/thethomasam/reverse-proxy-tunnel.git /app &&
-            cd /app &&
-            pip install -r requirements.txt &&
-            python app.py
-        ports:
-        - containerPort: 8080
+            - |
+              apt-get update && apt-get install -y git &&          
+              git clone https://github.com/thethomasam/reverse-proxy-tunnel.git &&
+              cd reverse-proxy-tunnel &&
+              python Backend/backend.py
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: backend-service
+  namespace: aiml-shop-objcount
+  name: backend
+  labels:
+    app: test-backend
+    service: backend
 spec:
+  type: ClusterIP
   selector:
-    app: backend  # Matches the labels in the Deployment
+    app: test-backend
+    service: backend
   ports:
-    - protocol: TCP
-      port: 80           # Port exposed by the Service
-      targetPort: 8080   # Port exposed by the container (from the Deployment)
-  type: LoadBalancer
+    - port: 80
+      protocol: TCP
+      targetPort: 8080
+  sessionAffinity: None
