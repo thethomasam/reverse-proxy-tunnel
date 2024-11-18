@@ -1,11 +1,15 @@
 # Use Python base image
 FROM python:3.9-slim
-FROM ubuntu:latest
+
 # Set working directory
 WORKDIR /app
 
-# Copy backend files
-COPY backend.py /app/
+# Install necessary system packages
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git \
+    curl \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install Flask
 RUN pip install flask
@@ -13,5 +17,5 @@ RUN pip install flask
 # Expose the backend port
 EXPOSE 3000
 
-# Run the Flask app
-ENTRYPOINT ["python", "backend.py"]
+# Default command to keep the container running, overridden in the Deployment
+CMD ["tail", "-f", "/dev/null"]

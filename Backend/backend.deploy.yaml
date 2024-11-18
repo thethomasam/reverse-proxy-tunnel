@@ -19,10 +19,10 @@ spec:
         args:
           - |
             apt-get update && apt-get install -y git &&
-            git clone https://github.com/thethomasam/reverse-proxy-tunnel.git  &&
-            cd /reverse-proxy-tunnel &&
+            git clone https://github.com/thethomasam/reverse-proxy-tunnel.git /app &&
+            cd /app &&
             pip install -r requirements.txt &&
-            python /Backend/backend.py
+            python app.py
         ports:
         - containerPort: 8080
 ---
