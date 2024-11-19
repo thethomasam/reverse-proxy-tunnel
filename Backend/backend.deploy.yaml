@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: aiml-shop-objcount
+  # namespace: aiml-engineering
   name: backend
   labels:
     app: test-backend
@@ -39,8 +39,8 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  namespace: aiml-shop-objcount
-  name: backend
+  # namespace: aiml-engineering
+  name: backend-service 
   labels:
     app: test-backend
     service: backend

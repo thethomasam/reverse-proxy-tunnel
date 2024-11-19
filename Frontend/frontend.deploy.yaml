@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: aiml-engineering
+  name: frontend
+  labels:
+    app: test-frontend
+    service: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: test-frontend
+      service: frontend
+  template:
+    metadata:
+      labels:
+        app: test-frontend
+        service: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: docker.io/thesamthomas77/frontend-env:v1
+        args: ["nginx", "-g", "daemon off;"]  # These replace the default CMD
+        ports:
+        - containerPort: 80
+       
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: aiml-engineering
+  name: frontend-service 
+  labels:
+    app: test-frontend
+    service: frontend
+spec:
+  type: ClusterIP
+  selector:
+    app: test-frontend
+    service: frontend
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 8080
+  sessionAffinity: None
